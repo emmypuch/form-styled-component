@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+// Styled components
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -10,12 +11,22 @@ const Form = styled.form`
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    max-width: 100%;
+    margin: 10px;
+  }
 `;
 
 const Label = styled.label`
   margin-bottom: 8px;
   font-weight: bold;
   font-size: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const Input = styled.input`
@@ -24,12 +35,21 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px;
+  }
 `;
 
 const ErrorMessage = styled.p`
   color: red;
   font-size: 12px;
   margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 11px;
+  }
 `;
 
 const SelectLabel = styled.div`
@@ -37,6 +57,10 @@ const SelectLabel = styled.div`
   font-weight: bold;
   margin-top: 5px;
   font-size: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const RadioGroup = styled.div`
@@ -45,14 +69,23 @@ const RadioGroup = styled.div`
   font-size: 14px;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const RadioOption = styled.label`
-  margin-right: 20px;
   padding: 10px;
   border: 1px solid #ccc;
-  width: 500px;
   border-radius: 4px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px;
+    margin-right: 0px;
+  }
 `;
 
 const Checkbox = styled.div`
@@ -63,6 +96,10 @@ const Checkbox = styled.div`
 
   input {
     margin-right: 8px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
   }
 `;
 
@@ -79,6 +116,11 @@ const Button = styled.button`
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 8px 12px;
   }
 `;
 
