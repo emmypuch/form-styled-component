@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 // Styled components
@@ -135,6 +136,8 @@ const FormComponent = () => {
 
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -176,6 +179,7 @@ const FormComponent = () => {
     e.preventDefault();
     if (validateForm()) {
       alert("Form submitted successfully!");
+      navigate("/dog-page");
     }
   };
 

@@ -1,6 +1,8 @@
 import React from "react";
 import FormComponent from "./component/form/FormComponent";
 import styled from "styled-components";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import DogComponent from "./component/dogs/DogComponent";
 
 const Container = styled.div`
   display: flex;
@@ -12,9 +14,14 @@ const Container = styled.div`
 
 function App() {
   return (
-    <Container>
-      <FormComponent />
-    </Container>
+    <Router>
+      <Container>
+        <Routes>
+          <Route path="/" element={<FormComponent />} />
+          <Route path="/dog-page" element={<DogComponent />} />{" "}
+        </Routes>
+      </Container>
+    </Router>
   );
 }
 
