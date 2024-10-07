@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import styled from "styled-components";
 
 // Styled components
@@ -126,97 +128,73 @@ const Button = styled.button`
 `;
 
 const FormComponent = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    queryType: "",
-    agreedToTerms: false,
-  });
-
-  const [errors, setErrors] = useState({});
-
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("First name is required"),
+    lastName: Yup.string().required("Last name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    queryType: Yup.string().required("Please select a query type"),
+    agreedToTerms: Yup.boolean().oneOf([true], "You must agree to the terms"),
+  });
 
-  const validateForm = () => {
-    let newErrors = {};
-
-    if (!formData.firstName) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName) {
-      newErrors.lastName = "Last name is required";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
-
-    if (!formData.queryType) {
-      newErrors.queryType = "Please select a query type";
-    }
-
-    if (!formData.agreedToTerms) {
-      newErrors.agreedToTerms = "You must agree to the terms";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      queryType: "",
+      agreedToTerms: false,
+    },
+    validationSchema,
+    onSubmit: (values) => {
       alert("Form submitted successfully!");
       navigate("/dog-page");
-    }
-  };
+    },
+  });
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={formik.handleSubmit}>
       <Label>First Name</Label>
       <Input
         type="text"
         name="firstName"
-        value={formData.firstName}
-        onChange={handleChange}
+        value={formik.values.firstName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
         placeholder="Enter your first name"
-        required
       />
-      {errors.firstName && <ErrorMessage>{errors.firstName}</ErrorMessage>}
+      {formik.touched.firstName && formik.errors.firstName && (
+        <ErrorMessage>{formik.errors.firstName}</ErrorMessage>
+      )}
 
       <Label>Last Name</Label>
       <Input
         type="text"
         name="lastName"
-        value={formData.lastName}
-        onChange={handleChange}
+        value={formik.values.lastName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
         placeholder="Enter your last name"
-        required
       />
-      {errors.lastName && <ErrorMessage>{errors.lastName}</ErrorMessage>}
+      {formik.touched.lastName && formik.errors.lastName && (
+        <ErrorMessage>{formik.errors.lastName}</ErrorMessage>
+      )}
 
       <Label>Email</Label>
       <Input
         type="email"
         name="email"
-        value={formData.email}
-        onChange={handleChange}
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
         placeholder="Enter your email"
-        required
       />
-      {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+      {formik.touched.email && formik.errors.email && (
+        <ErrorMessage>{formik.errors.email}</ErrorMessage>
+      )}
 
       <SelectLabel>Query Type</SelectLabel>
       <RadioGroup>
@@ -225,8 +203,8 @@ const FormComponent = () => {
             type="radio"
             name="queryType"
             value="general"
-            onChange={handleChange}
-            required
+            onChange={formik.handleChange}
+            checked={formik.values.queryType === "general"}
           />
           General Inquiry
         </RadioOption>
@@ -235,28 +213,30 @@ const FormComponent = () => {
             type="radio"
             name="queryType"
             value="support"
-            onChange={handleChange}
-            required
+            onChange={formik.handleChange}
+            checked={formik.values.queryType === "support"}
           />
           Support Request
         </RadioOption>
       </RadioGroup>
-      {errors.queryType && <ErrorMessage>{errors.queryType}</ErrorMessage>}
+      {formik.touched.queryType && formik.errors.queryType && (
+        <ErrorMessage>{formik.errors.queryType}</ErrorMessage>
+      )}
 
       <Checkbox>
         <input
           type="checkbox"
           name="agreedToTerms"
-          checked={formData.agreedToTerms}
-          onChange={handleChange}
+          checked={formik.values.agreedToTerms}
+          onChange={formik.handleChange}
         />
         I consent to being contacted by the team
       </Checkbox>
-      {errors.agreedToTerms && (
-        <ErrorMessage>{errors.agreedToTerms}</ErrorMessage>
+      {formik.touched.agreedToTerms && formik.errors.agreedToTerms && (
+        <ErrorMessage>{formik.errors.agreedToTerms}</ErrorMessage>
       )}
 
-      <Button type="submit" disabled={!formData.agreedToTerms}>
+      <Button type="submit" disabled={!formik.values.agreedToTerms}>
         Submit
       </Button>
     </Form>
