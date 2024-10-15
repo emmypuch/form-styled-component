@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 // Styled components
 const Container = styled.div`
@@ -40,11 +41,16 @@ const Button = styled.button`
 `;
 
 const DogComponent = () => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/breeds");
+  };
+
   return (
     <Container>
       <Div>
         <P>Welcome to Dog's World!</P>
-        <Button>Let's dive in</Button>
+        <Button onClick={handleClick}>Let's dive in</Button>
       </Div>
     </Container>
   );
